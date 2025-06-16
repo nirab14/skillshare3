@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkillShare</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet">
+    <style>
+        .feedback-image-section {
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .feedback-image {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: cover;
+            object-position: center;
+            max-width: 100%;
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: crisp-edges;
+        }
+
+        /* New Teacher Popup Styling */
+        .teacher-popup-content {
+            background-color: #000000;
+            color: #ffffff;
+            padding: 40px;
+            width: 500px;
+            max-width: 90%;
+            border-radius: 10px;
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+
+        .teacher-popup-content input,
+        .teacher-popup-content select {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #00FF66;
+            background-color: #1a1a1a;
+            color: #ffffff;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .teacher-popup-content button {
+            background-color: #00FF66;
+            color: #000000;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+
+        .teacher-popup-content button:hover {
+            background-color: #00cc52;
+        }
+
+        .teacher-popup-content .close-btn {
+            color: #ffffff;
+            font-size: 24px;
+            cursor: pointer;
+            position: absolute;
+            top: 10px;
+            right: 20px;
+        }
+
+        .teacher-popup-content .error {
+            color: #ff3333;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .popup.show {
+            display: flex;
+        }
+
+        /* Categories Section Styling */
+        .categories {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px;
+            background-color: #000000;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+        }
+
+        .column {
+            line-height: 1.8;
+        }
+
+        .column h3 {
+            color: #ffffff;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .column a {
+            color: #00FF66;
+            text-decoration: none;
+            display: block;
+        }
+
+        .column a:hover {
+            text-decoration: underline;
+        }
+
+        /* Mentorship Section Styling */
+        .mentorship-section {
+            text-align: center;
+            padding: 40px 20px;
+            margin-bottom: 40px;
+        }
+
+        .mentorship-section h2 {
+            font-size: 36px;
+            color: #FFFFFF;
+            font-family: 'Poppins', sans-serif;
+            margin-bottom: 10px;
+        }
+
+        .mentorship-section p {
+            font-size: 24px;
+            color: #FFFFFF;
+            margin-bottom: 20px;
+        }
+
+        .join-now-button {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            background-color: #00FF66;
+            color: #000000;
+            font-size: 18px;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .join-now-button:hover {
+            background-color: #00CC55;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">SkillShare</div>
+        <div class="header-buttons">
+            <button class="subscription-button" onclick="openSubscriptionPopup()">Subscription</button>
+            <div class="auth-buttons">
+                <button onclick="openSignInPopup()">Sign In</button>
+                <button onclick="openSignUpPopup()">Sign Up</button>
+                <button class="teacher-button" onclick="openTeacherPopup()">Become a Teacher</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Video and Text Section -->
+    <div class="video-text-container">
+        <div class="video-container">
+            <div id="youtube-player"></div>
+        </div>
+        <div class="text-container">
+            <h1>Creative Learning Made Easy</h1>
+            <ul>
+                <li><i class="fas fa-check-circle"></i> Thousands of creative classes. Beginner to Pro.</li>
+                <li><i class="fas fa-check-circle"></i> Taught by creative pros and industry icons.</li>
+                <li><i class="fas fa-check-circle"></i> Learning paths to help you achieve your goals.</li>
+                <li><i class="fas fa-check-circle"></i> Certificates to celebrate your accomplishments.</li>
+            </ul>
+            <button class="browse-courses" onclick="browseCourses()">Browse Courses</button>
+        </div>
+    </div>
+
+    <!-- Banner -->
+    <div class="banner">
+        <div class="banner-track">
+            <div class="banner-item" style="background-image: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c');">Photography</div>
+            <div class="banner-item" style="background-image: url('https://images.unsplash.com/photo-1549880338-65ddcdfd017b');">Fine Art</div>
+            <div class="banner-item" style="background-image: url('https://images.unsplash.com/photo-1552664730-d307ca884978');">Marketing</div>
+            <div class="banner-item" style="background-image: url('graphic.jpeg');">Graphic Design</div>
+            <div class="banner-item" style="background-image: url('https://images.unsplash.com/photo-1596727147705-61a532a659bd');">Illustration</div>
+            <!-- Duplicate for seamless loop -->
+            <div class="banner-item" style="background-image: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c');">Photography</div>
+            <div class="banner-item" style="background-image: url('https://images.unsplash.com/photo-1549880338-65ddcdfd017b');">Fine Art</div>
+            <div class="banner-item" style="background-image: url('https://images.unsplash.com/photo-1552664730-d307ca884978');">Marketing</div>
+            <div class="banner-item" style="background-image: url('graphic.jpeg');">Graphic Design</div>
+            <div class="banner-item" style="background-image: url('https://images.unsplash.com/photo-1596727147705-61a532a659bd');">Illustration</div>
+        </div>
+    </div>
+
+    <!-- Explore Text -->
+    <div class="explore-text">Explore inspiring online courses</div>
+
+    <!-- Sign Up Popup -->
+    <div class="popup" id="signUpPopup">
+        <div class="popup-content">
+            <span class="close-btn" onclick="closePopup('signUpPopup')">×</span>
+            <h1>Sign Up</h1>
+            <div id="signUpError" class="error"></div>
+            <input type="text" id="signUpName" placeholder="Full Name" required>
+            <input type="email" id="signUpEmail" placeholder="Email" required>
+            <input type="password" id="signUpPassword" placeholder="Password" required>
+            <button onclick="handleSignUp()">Sign Up</button>
+            <button class="google-signin" onclick="signInWithGoogle()"><i class="fab fa-google"></i> Sign Up with Google</button>
+            <div class="toggle-auth">
+                Already have an account? <a href="#" onclick="switchToSignIn()">Sign In</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sign In Popup -->
+    <div class="popup" id="signInPopup">
+        <div class="popup-content">
+            <span class="close-btn" onclick="closePopup('signInPopup')">×</span>
+            <h1>Sign In</h1>
+            <div id="signInError" class="error"></div>
+            <input type="email" id="signInEmail" placeholder="Email" required>
+            <input type="password" id="signInPassword" placeholder="Password" required>
+            <button onclick="handleSignIn()">Sign In</button>
+            <button class="google-signin" onclick="signInWithGoogle()"><i class="fab fa-google"></i> Sign In with Google</button>
+            <div class="toggle-auth">
+                Don’t have an account? <a href="#" onclick="switchToSignUp()">Sign Up</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Subscription Popup -->
+    <div class="popup" id="subscriptionPopup">
+        <div class="popup-content subscription-popup-content">
+            <span class="close-btn" onclick="closePopup('subscriptionPopup')">×</span>
+            <h1>Subscription Details</h1>
+            <p>Price: 400 INR per month</p>
+            <p>Benefits:</p>
+            <ul style="text-align: left;">
+                <li>Unlimited access to all courses</li>
+                <li>Exclusive content and workshops</li>
+                <li>Priority support</li>
+                <li>Downloadable resources</li>
+                <li>Certificate of completion</li>
+            </ul>
+            <button onclick="alert('Redirecting to payment...')">Subscribe Now</button>
+        </div>
+    </div>
+
+    <!-- Teacher Application Popup -->
+    <div class="popup" id="teacherPopup">
+        <div class="teacher-popup-content">
+            <span class="close-btn" onclick="closePopup('teacherPopup')">×</span>
+            <h1>Become a Teacher</h1>
+            <div id="teacherError" class="error"></div>
+            <input type="text" id="teacherName" placeholder="Full Name" required>
+            <input type="email" id="teacherEmail" placeholder="Email" required>
+            <select id="teacherSpecialization" required>
+                <option value="" disabled selected>Select Specialization</option>
+                <option value="Illustration">Illustration</option>
+                <option value="Graphic Design">Graphic Design</option>
+                <option value="Photography">Photography</option>
+                <option value="Video Editing">Video Editing</option>
+                <option value="Marketing">Marketing</option>
+                <option value="UI/UX Design">UI/UX Design</option>
+                <option value="Fine Art">Fine Art</option>
+                <option value="Other">Other</option>
+            </select>
+            <input type="number" id="teacherAge" placeholder="Age" min="18" required>
+            <input type="text" id="teacherExperience" placeholder="Years of Experience" required>
+            <button onclick="handleTeacherApplication()">Send to Process</button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Course List -->
+        <div class="course-list" id="course-list">
+            <div class="course-card" onclick="openCourse('procreate')">
+                <i class="fas fa-paint-brush"></i>
+                <h3>Procreate Creativity</h3>
+            </div>
+            <div class="course-card" onclick="openCourse('canva')">
+                <i class="fas fa-palette"></i>
+                <h3>Canva Social Media</h3>
+            </div>
+            <div class="course-card" onclick="openCourse('watercolor')">
+                <i class="fas fa-tint"></i>
+                <h3>Watercolour Landscapes</h3>
+            </div>
+            <div class="course-card" onclick="openCourse('figma')">
+                <i class="fas fa-drafting-compass"></i>
+                <h3>Figma UI/UX Design</h3>
+            </div>
+            <div class="course-card" onclick="openCourse('video-editing')">
+                <i class="fas fa-video"></i>
+                <h3>Adobe Premiere Pro</h3>
+            </div>
+            <div class="course-card" onclick="openCourse('iphone-photography')">
+                <i class="fas fa-camera"></i>
+                <h3>iPhone Photography</h3>
+            </div>
+        </div>
+
+        <!-- Editor's Choice -->
+        <div class="editors-choice">
+            <h2>Editor's Choice</h2>
+            <div class="course-grid">
+                <div class="course-item" onclick="window.location.href='photography.html'">
+                    <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" alt="Photography">
+                    <div class="course-info">
+                        <span class="tag">STAFF PICK</span>
+                        <h3>Mastering Portrait Photography</h3>
+                        <div class="stats">
+                            <span>12,345 students</span>
+                            <span>2h 15m</span>
+                        </div>
+                        <div class="instructor">John Smith</div>
+                    </div>
+                </div>
+                <div class="course-item" onclick="window.location.href='oil-painting.html'">
+                    <img src="https://images.unsplash.com/photo-1549880338-65ddcdfd017b" alt="Fine Art">
+                    <div class="course-info">
+                        <span class="tag">STAFF PICK</span>
+                        <h3>Oil Painting Techniques</h3>
+                        <div class="stats">
+                            <span>8,765 students</span>
+                            <span>3h 30m</span>
+                        </div>
+                        <div class="instructor">Emily Johnson</div>
+                    </div>
+                </div>
+                <div class="course-item" onclick="window.location.href='dms.html'">
+                    <img src="https://images.unsplash.com/photo-1552664730-d307ca884978" alt="Marketing">
+                    <div class="course-info">
+                        <span class="tag">STAFF PICK</span>
+                        <h3>Digital Marketing Strategies</h3>
+                        <div class="stats">
+                            <span>15,432 students</span>
+                            <span>4h 10m</span>
+                        </div>
+                        <div class="instructor">Michael Brown</div>
+                    </div>
+                </div>
+                <div class="course-item" onclick="window.location.href='agd.html'">
+                    <img src="graphic.jpeg" alt="Graphic Design">
+                    <div class="course-info">
+                        <span class="tag">STAFF PICK</span>
+                        <h3>Advanced Graphic Design</h3>
+                        <div class="stats">
+                            <span>9,876 students</span>
+                            <span>3h 45m</span>
+                        </div>
+                        <div class="instructor">Sarah Davis</div>
+                    </div>
+                </div>
+                <div class="course-item">
+                    <img src="https://images.unsplash.com/photo-1596727147705-61a532a659bd" alt="Illustration">
+                    <div class="course-info">
+                        <span class="tag">STAFF PICK</span>
+                        <h3>Digital Illustration Basics</h3>
+                        <div class="stats">
+                            <span>7,654 students</span>
+                            <span>2h 50m</span>
+                        </div>
+                        <div class="instructor">David Wilson</div>
+                    </div>
+                </div>
+                <div class="course-item">
+                    <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" alt="Animation">
+                    <div class="course-info">
+                        <span class="tag">STAFF PICK</span>
+                        <h3>2D Animation for Beginners</h3>
+                        <div class="stats">
+                            <span>11,223 students</span>
+                            <span>3h 20m</span>
+                        </div>
+                        <div class="instructor">Laura Miller</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Creative Experts Section -->
+        <div class="experts-section">
+            <h2>Learn from Creative Experts</h2>
+            <div class="experts-grid">
+                <div class="expert-item">
+                    <img src="https://images.theconversation.com/files/513162/original/file-20230302-19-71nc30.jpg?ixlib=rb-4.1.0&rect=0%2C0%2C2763%2C1845&q=45&auto=format&w=926&fit=clip" alt="Joe Goldberg">
+                    <div class="expert-info">
+                        <h3>Joe Goldberg</h3>
+                        <p>Video Editor</p>
+                    </div>
+                </div>
+                <div class="expert-item">
+                    <img src="https://i.redd.it/oyvfkhpkp8he1.jpeg" alt="Walter White">
+                    <div class="expert-info">
+                        <h3>Walter White</h3>
+                        <p>Teaches DSA</p>
+                    </div>
+                </div>
+                <div class="expert-item">
+                    <img src="https://practicaltyping.com/wp-content/uploads/2021/08/jessicapearson.png" alt="Sarah Johnson">
+                    <div class="expert-info">
+                        <h3>Jessica Pearson</h3>
+                        <p>Digital Illustrator</p>
+                    </div>
+                </div>
+                <div class="expert-item">
+                    <img src="https://images.unsplash.com/photo-1519345182560-3f2917c472ef" alt="Michael Lee">
+                    <div class="expert-info">
+                        <h3>Michael Lee</h3>
+                        <p>Photography Mentor</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Section -->
+        <div class="stats-section">
+            <div class="stats-item">
+                <h2>425K+</h2>
+                <p>MEMBERS</p>
+            </div>
+            <div class="stats-item">
+                <h2>30K+</h2>
+                <p>CLASSES</p>
+            </div>
+            <div class="stats-item">
+                <h2>9K+</h2>
+                <p>TEACHERS</p>
+            </div>
+            <div class="stats-item">
+                <h2>4.8 <span class="stars">★★★★★</span></h2>
+                <p>APP STORE RATING</p>
+            </div>
+        </div>
+
+        <!-- Mentorship Section -->
+        <div class="mentorship-section">
+            <h2>Confused about a course or what's the trend in the big 2025?</h2>
+            <p>Join the 1:1 mentorship now and clear all your doubts</p>
+            <button class="join-now-button" onclick="joinMentorship()">Join Now</button>
+        </div>
+
+        <!-- FAQ Section -->
+        <div class="faq-section">
+            <h2>Frequently Asked Questions</h2>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <h3>What is Skillshare?</h3>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Skillshare is an online learning community with thousands of classes for creative and curious people, on topics including illustration, design, photography, video, freelancing, and more. On Skillshare, you’ll find inspiration from hands-on classes and teachers at the top of their creative fields, so you can take the next step in your creative journey.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <h3>What happens after my trial is over?</h3>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>After your trial ends, your paid Skillshare membership begins. With an annual subscription, you’ll be billed for the year in full, so you can enjoy continuous access to creative classes year-round. With a monthly subscription, you’ll be billed each month.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <h3>What can I learn from Skillshare?</h3>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Skillshare has thousands of classes in everything from graphic design to cooking, productivity, filmmaking, content creation, UI/UX design, marketing, crafts, music, social media, entrepreneurship. If it's something creative, you can learn it on Skillshare.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <h3>Can I teach on Skillshare?</h3>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Yes! Skillshare teachers are everyday creatives and professionals who want to share their passion, and the skills and experience they’ve gained in their creative disciplines with a community of eager learners. To learn more about teaching on Skillshare, visit our <a href="https://help.skillshare.com" target="_blank">Help Center</a>.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <h3>What is included in my Skillshare membership?</h3>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>As a Skillshare member, you’ll have unlimited access to all Skillshare classes to watch when and where you want, and additional features such as offline viewing, access to a vibrant community of lifelong learners, and so much more.</p>
+                </div>
+            </div>
+        </div>
+        <br><br><br>
+        <!-- Categories Section -->
+        <div class="categories">
+            <div class="column">
+                <h3>Art and Illustration</h3>
+                <a href="#">Illustration classes</a>
+                <a href="#">Digital art classes</a>
+                <a href="#">Drawing classes</a>
+                <a href="#">Painting classes</a>
+                <a href="#">Watercolor classes</a>
+                <a href="#">More...</a>
+            </div>
+            <div class="column">
+                <h3>Graphic Design</h3>
+                <a href="#">Graphic design classes</a>
+                <a href="#">UI/UX design classes</a>
+                <a href="#">Type design classes</a>
+                <a href="#">Surface pattern design classes</a>
+                <a href="#">Motion design classes</a>
+                <a href="#">More...</a>
+            </div>
+            <div class="column">
+                <h3>Creative Career</h3>
+                <a href="#">Marketing classes</a>
+                <a href="#">Freelance classes</a>
+                <a href="#">AI classes</a>
+                <a href="#">Productivity classes</a>
+                <a href="#">Social media classes</a>
+                <a href="#">More...</a>
+            </div>
+            <div class="column">
+                <h3>Film, Video, and Photography</h3>
+                <a href="#">Film career classes</a>
+                <a href="#">Video production classes</a>
+                <a href="#">Photography technique classes</a>
+                <a href="#">Photography editing classes</a>
+                <a href="#">Content creation classes</a>
+                <a href="#">More...</a>
+            </div>
+            <div class="column">
+                <h3>Software</h3>
+                <a href="#">Procreate classes</a>
+                <a href="#">Adobe Illustrator classes</a>
+                <a href="#">ChatGPT classes</a>
+                <a href="#">Blender classes</a>
+                <a href="#">Canva classes</a>
+                <a href="#">More...</a>
+            </div>
+            <div class="column">
+                <h3>Trending Classes</h3>
+                <a href="#">Kickstart your Creativity with Procreate</a>
+                <a href="#">How to Draw: A Beginner’s Guide</a>
+                <a href="#">Social Media Content Creation in Canva</a>
+                <a href="#">Landscapes: A Free-Flow Watercolour Masterclass</a>
+                <a href="#">Develop a Sketchbook Habit in 30 Days</a>
+                <a href="#">More...</a>
+            </div>
+        </div>
+        <br><br>
+        <div class="footer-note">
+            © Skillshare, Inc. 2025
+        </div>
+
+        <!-- Follow Us Section -->
+        <div class="follow-us-section">
+            <h3>Follow us on:</h3>
+            <div class="social-icons">
+                <a href="https://instagram.com/skillshare" target="_blank">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram">
+                </a>
+                <a href="https://twitter.com/skillshare" target="_blank">
+                    <img src="x.jpg" alt="X">
+                </a>
+                <a href="https://www.linkedin.com/company/skillshare-com" target="_blank">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" alt="LinkedIn">
+                </a>
+                <a href="https://www.youtube.com/user/Skillshare" target="_blank">
+                    <img src="yt.jpg" alt="YouTube">
+                </a>
+            </div>
+            <p>ALL MEMBERSHIPS WILL BE BILLED AUTOMATICALLY ON A RECURRING BASIS UNTIL CANCELED. IF ELIGIBLE FOR A FREE TRIAL, CANCEL BEFORE THE TRIAL ENDS TO AVOID BEING CHARGED. OFFER ONLY VALID FOR NEW PAID SUBSCRIBERS.</p>
+            <p class="terms">See full terms of service <a href="#">here</a>.</p>
+            <p class="copyright">© Skillshare, Inc. 2025</p>
+        </div>
+    </div>
+
+    <script>
+        // YouTube IFrame API
+        let player;
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('youtube-player', {
+                height: '100%',
+                width: '100%',
+                videoId: 'V105sqikHaA',
+                playerVars: {
+                    'autoplay': 1,
+                    'mute': 1,
+                    'controls': 1,
+                    'rel': 0,
+                    'loop': 1,
+                    'playlist': 'V105sqikHaA'
+                },
+                events: {
+                    'onReady': onPlayerReady
+                }
+            });
+        }
+
+        function onPlayerReady(event) {
+            event.target.playVideo();
+        }
+
+        // Load YouTube IFrame API
+        const tag = document.createElement('script');
+        tag.src = 'https://www.youtube.com/iframe_api';
+        const firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+        // Popup Functions
+        function openSignUpPopup() {
+            document.getElementById('signUpPopup').style.display = 'flex';
+            document.getElementById('signInPopup').style.display = 'none';
+            document.getElementById('subscriptionPopup').style.display = 'none';
+            document.getElementById('teacherPopup').style.display = 'none';
+            clearError('signUpError');
+        }
+
+        function openSignInPopup() {
+            document.getElementById('signInPopup').style.display = 'flex';
+            document.getElementById('signUpPopup').style.display = 'none';
+            document.getElementById('subscriptionPopup').style.display = 'none';
+            document.getElementById('teacherPopup').style.display = 'none';
+            clearError('signInError');
+        }
+
+        function openSubscriptionPopup() {
+            document.getElementById('subscriptionPopup').style.display = 'flex';
+            document.getElementById('signUpPopup').style.display = 'none';
+            document.getElementById('signInPopup').style.display = 'none';
+            document.getElementById('teacherPopup').style.display = 'none';
+        }
+
+        function openTeacherPopup() {
+            document.getElementById('teacherPopup').style.display = 'flex';
+            document.getElementById('signUpPopup').style.display = 'none';
+            document.getElementById('signInPopup').style.display = 'none';
+            document.getElementById('subscriptionPopup').style.display = 'none';
+            clearError('teacherError');
+        }
+
+        function closePopup(popupId) {
+            document.getElementById(popupId).style.display = 'none';
+            clearError(popupId === 'signUpPopup' ? 'signUpError' : popupId === 'signInPopup' ? 'signInError' : 'teacherError');
+        }
+
+        function switchToSignIn() {
+            openSignInPopup();
+        }
+
+        function switchToSignUp() {
+            openSignUpPopup();
+        }
+
+        // Handle Sign Up
+        function handleSignUp() {
+            const name = document.getElementById('signUpName').value;
+            const email = document.getElementById('signUpEmail').value;
+            const password = document.getElementById('signUpPassword').value;
+
+            if (!name || !email || !password) {
+                displayError('signUpError', "Please fill in all required fields.");
+                return;
+            }
+
+            alert(`Sign Up Successful! Welcome, ${name}`);
+            closePopup('signUpPopup');
+        }
+
+        // Handle Sign In
+        function handleSignIn() {
+            const email = document.getElementById('signInEmail').value;
+            const password = document.getElementById('signInPassword').value;
+
+            if (!email || !password) {
+                displayError('signInError', "Please fill in all required fields.");
+                return;
+            }
+
+            alert("Sign In Successful!");
+            closePopup('signInPopup');
+        }
+
+        // Handle Teacher Application
+        function handleTeacherApplication() {
+            const name = document.getElementById('teacherName').value;
+            const email = document.getElementById('teacherEmail').value;
+            const specialization = document.getElementById('teacherSpecialization').value;
+            const age = document.getElementById('teacherAge').value;
+            const experience = document.getElementById('teacherExperience').value;
+
+            if (!name || !email || !specialization || !age || !experience) {
+                displayError('teacherError', "Please fill in all required fields.");
+                return;
+            }
+
+            if (age < 18) {
+                displayError('teacherError', "You must be at least 18 years old.");
+                return;
+            }
+
+            alert(`Application Submitted! Thank you, ${name}. We will review your application soon.`);
+            closePopup('teacherPopup');
+        }
+
+        // Google Sign-In (Mock)
+        function signInWithGoogle() {
+            alert("Google Sign-In initiated! (This is a mock function)");
+        }
+
+        // Browse Courses
+        function browseCourses() {
+            window.location.href = 'courses.html';
+        }
+
+        // Join Mentorship
+        function joinMentorship() {
+            window.location.href = 'mentorship.html';
+        }
+
+        // Display Error Message
+        function displayError(errorId, message) {
+            document.getElementById(errorId).innerText = message;
+        }
+
+        // Clear Error Message
+        function clearError(errorId) {
+            document.getElementById(errorId).innerText = '';
+        }
+
+        // Open Course in New Window
+        function openCourse(course) {
+            const courseUrls = {
+                procreate: 'https://example.com/procreate',
+                canva: 'https://example.com/canva',
+                watercolor: 'https://example.com/watercolor',
+                figma: 'https://example.com/figma',
+                'video-editing': 'https://example.com/video-editing',
+                'iphone-photography': 'https://example.com/iphone-photography'
+            };
+            window.open(courseUrls[course], '_blank');
+        }
+
+        // Toggle FAQ
+        function toggleFAQ(element) {
+            const answer = element.nextElementSibling;
+            const icon = element.querySelector('i');
+            if (answer.style.display === 'block') {
+                answer.style.display = 'none';
+                icon.classList.remove('fa-chevron-up');
+                icon.classList.add('fa-chevron-down');
+            } else {
+                answer.style.display = 'block';
+                icon.classList.remove('fa-chevron-down');
+                icon.classList.add('fa-chevron-up');
+            }
+        }
+    </script>
+</body>
+</html>

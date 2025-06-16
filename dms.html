@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Marketing Strategies - SkillShare</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #000000;
+            color: #FFFFFF;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background-color: #000000;
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo {
+            font-family: 'Poppins', sans-serif;
+            font-size: 32px;
+            font-weight: 700;
+            color: #FFFFFF;
+        }
+
+        .header-buttons {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .subscription-button, .home-button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            background-color: #00FF66;
+            color: #000000;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .subscription-button:hover, .home-button:hover {
+            background-color: #00CC55;
+        }
+
+        .main-content {
+            padding: 40px;
+        }
+
+        .course-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .course-header h1 {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+
+        .course-header img {
+            width: 100%;
+            max-height: 300px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .course-details {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 40px;
+        }
+
+        .course-info {
+            width: 60%;
+        }
+
+        .course-info h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .course-info p {
+            font-size: 16px;
+            color: #BBBBBB;
+            margin-bottom: 20px;
+        }
+
+        .course-info ul {
+            list-style: none;
+            margin-bottom: 20px;
+        }
+
+        .course-info ul li {
+            font-size: 16px;
+            color: #BBBBBB;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .course-info ul li i {
+            color: #00FF66;
+            margin-right: 10px;
+        }
+
+        .enroll-button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            background-color: #00FF66;
+            color: #000000;
+            font-weight: bold;
+            font-size: 16px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .enroll-button:hover {
+            background-color: #00CC55;
+            transform: scale(1.05);
+        }
+
+        .sidebar {
+            width: 35%;
+            background-color: #1a1a1a;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .sidebar h3 {
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+
+        .sidebar p {
+            font-size: 16px;
+            color: #BBBBBB;
+            margin-bottom: 10px;
+        }
+
+        .instructor-profile {
+            margin-bottom: 40px;
+        }
+
+        .instructor-profile img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin-bottom: 10px;
+        }
+
+        .instructor-profile h3 {
+            font-size: 20px;
+            color: #FFFFFF;
+        }
+
+        .reviews {
+            margin-bottom: 40px;
+        }
+
+        .review-item {
+            background-color: #2a2a2a;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .review-item p {
+            font-size: 16px;
+            color: #BBBBBB;
+        }
+
+        .review-item cite {
+            font-size: 14px;
+            color: #00FF66;
+            font-weight: bold;
+        }
+
+        .course-blueprint {
+            margin-bottom: 40px;
+        }
+
+        .course-blueprint h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .blueprint-item {
+            margin-bottom: 20px;
+        }
+
+        .blueprint-item h3 {
+            font-size: 18px;
+            color: #FFFFFF;
+            margin-bottom: 10px;
+        }
+
+        .blueprint-item ul {
+            list-style: none;
+        }
+
+        .blueprint-item ul li {
+            font-size: 16px;
+            color: #BBBBBB;
+            margin-bottom: 5px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .blueprint-item ul li::before {
+            content: "•";
+            color: #00FF66;
+            position: absolute;
+            left: 0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">SkillShare</div>
+        <div class="header-buttons">
+            
+            <a href="index.html"><button class="home-button">Home</button></a>
+        </div>
+    </header>
+
+    <div class="main-content">
+        <div class="course-header">
+            <h1>Digital Marketing Strategies</h1>
+            <img src="https://images.unsplash.com/photo-1552664730-d307ca884978" alt="Digital Marketing">
+        </div>
+
+        <div class="course-details">
+            <div class="course-info">
+                <h2>About This Course</h2>
+                <p>Boost your marketing skills with Michael Brown. Learn SEO, social media marketing, and analytics to grow your brand.</p>
+                <h2>Course Details</h2>
+                <ul>
+                    <li><i class="fas fa-rupee-sign"></i> Price: 3500 INR</li>
+                    <li><i class="fas fa-clock"></i> Duration: 4 hours 10 minutes</li>
+                    <li><i class="fas fa-certificate"></i> Certificate: Digital Certificate of Completion</li>
+                </ul>
+                <h2>Prerequisites</h2>
+                <ul>
+                    <li><i class="fas fa-check-circle"></i> Basic understanding of marketing</li>
+                    <li><i class="fas fa-check-circle"></i> Access to a computer with internet</li>
+                    <li><i class="fas fa-check-circle"></i> Social media accounts</li>
+                </ul>
+                <button class="enroll-button" onclick="alert('Enrolling in Digital Marketing Strategies...')">Enroll Now</button>
+            </div>
+            <div class="sidebar">
+                <div class="instructor-profile">
+                    <h3>Instructor</h3>
+                    <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7" alt="Michael Brown">
+                    <h3>Michael Brown</h3>
+                    <p>Digital marketing expert with 10 years of experience in SEO and social media strategies for global brands.</p>
+                </div>
+                <div class="reviews">
+                    <h3>Learner Reviews</h3>
+                    <div class="review-item">
+                        <p>"Michael's insights on SEO were invaluable. Great course!"</p>
+                        <cite>Sneha Gupta</cite>
+                    </div>
+                    <div class="review-item">
+                        <p>"This course helped me grow my business online. Amazing content!"</p>
+                        <cite>Arjun Mehta</cite>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="course-blueprint">
+            <h2>Course Blueprint</h2>
+            <div class="blueprint-item">
+                <h3>1. Introduction to Digital Marketing</h3>
+                <ul>
+                    <li>Overview of digital marketing</li>
+                    <li>Setting marketing goals</li>
+                    <li>Understanding your audience</li>
+                </ul>
+            </div>
+            <div class="blueprint-item">
+                <h3>2. Search Engine Optimization</h3>
+                <ul>
+                    <li>Keyword research</li>
+                    <li>On-page and off-page SEO</li>
+                    <li>SEO tools and analytics</li>
+                </ul>
+            </div>
+            <div class="blueprint-item">
+                <h3>3. Social Media Marketing</h3>
+                <ul>
+                    <li>Creating engaging content</li>
+                    <li>Platform-specific strategies</li>
+                    <li>Advertising on social media</li>
+                </ul>
+            </div>
+            <div class="blueprint-item">
+                <h3>4. Analytics and Reporting</h3>
+                <ul>
+                    <li>Setting up Google Analytics</li>
+                    <li>Tracking campaign performance</li>
+                    <li>Optimizing strategies</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openSubscriptionPopup() {
+            alert("Subscription details to be implemented.");
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Courses - SkillShare</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="logo">SkillShare</div>
+        <div class="header-buttons">
+            <button onclick="window.location.href='index.html'">Home</button>
+        </div>
+    </header>
+
+    <div class="main-content">
+        <h1>Explore Our Courses</h1>
+
+        <!-- Filter Section -->
+        <div class="filter-section">
+            <div>
+                <label for="categoryFilter">Category:</label>
+                <select id="categoryFilter">
+                    <option value="all">All Categories</option>
+                    <option value="Photography">Photography</option>
+                    <option value="UI/UX">UI/UX</option>
+                    <option value="Guitar">Guitar</option>
+                    <option value="Python">Python</option>
+                    <option value="Cooking">Cooking</option>
+                    <option value="Video Editing">Video Editing</option>
+                </select>
+            </div>
+            <div>
+                <label for="instructorFilter">Instructor:</label>
+                <select id="instructorFilter">
+                    <option value="all">All Instructors</option>
+                </select>
+            </div>
+            <div>
+                <label for="ratingFilter">Min Rating:</label>
+                <input type="range" id="ratingFilter" min="1" max="5" value="1" step="0.5">
+                <span id="ratingValue">1</span> Stars
+            </div>
+            <button onclick="filterCourses()">Filter</button>
+        </div>
+
+        <!-- Course Grid -->
+        <div class="course-grid" id="courseGrid"></div>
+
+        <!-- Review Section -->
+        <div class="review-section">
+            <h2>Submit a Review</h2>
+            <div class="review-form">
+                <input type="text" id="reviewerName" placeholder="Your Name" required>
+                <select id="reviewCourse" required>
+                    <option value="">Select Course</option>
+                </select>
+                <select id="reviewRating" required>
+                    <option value="">Select Rating</option>
+                    <option value="1">1 Star</option>
+                    <option value="2">2 Stars</option>
+                    <option value="3">3 Stars</option>
+                    <option value="4">4 Stars</option>
+                    <option value="5">5 Stars</option>
+                </select>
+                <textarea id="reviewText" placeholder="Your Review" required></textarea>
+                <button onclick="submitReview()">Submit Review</button>
+            </div>
+            <div class="review-list" id="reviewList"></div>
+        </div>
+    </div>
+
+    <script>
+        // Course Data
+        const courses = [
+            // Photography (10)
+            { id: 1, title: "Portrait Photography Basics", category: "Photography", instructor: "Ananya Sharma", students: 12345, duration: "2h 15m", rating: 4.5 },
+            { id: 2, title: "Landscape Photography Techniques", category: "Photography", instructor: "Rahul Patel", students: 8765, duration: "3h 00m", rating: 4.8 },
+            { id: 3, title: "Street Photography Essentials", category: "Photography", instructor: "Priya Nair", students: 9876, duration: "2h 45m", rating: 4.2 },
+            { id: 4, title: "Night Photography Mastery", category: "Photography", instructor: "Vikram Singh", students: 6543, duration: "2h 30m", rating: 4.7 },
+            { id: 5, title: "Wildlife Photography Skills", category: "Photography", instructor: "Neha Gupta", students: 11234, duration: "3h 15m", rating: 4.4 },
+            { id: 6, title: "Macro Photography Fundamentals", category: "Photography", instructor: "Arjun Mehta", students: 7890, duration: "2h 00m", rating: 4.6 },
+            { id: 7, title: "Event Photography Pro", category: "Photography", instructor: "Sanya Kapoor", students: 5432, duration: "2h 50m", rating: 4.3 },
+            { id: 8, title: "Drone Photography Basics", category: "Photography", instructor: "Kiran Desai", students: 6789, duration: "2h 20m", rating: 4.9 },
+            { id: 9, title: "Food Photography Styling", category: "Photography", instructor: "Ravi Kumar", students: 4321, duration: "2h 10m", rating: 4.1 },
+            { id: 10, title: "Astrophotography Essentials", category: "Photography", instructor: "Meera Joshi", students: 8901, duration: "3h 40m", rating: 4.5 },
+
+            // UI/UX (20)
+            { id: 11, title: "UI/UX Design Fundamentals", category: "UI/UX", instructor: "Amit Sharma", students: 15432, duration: "4h 10m", rating: 4.7 },
+            { id: 12, title: "Figma for Beginners", category: "UI/UX", instructor: "Sneha Reddy", students: 9876, duration: "3h 45m", rating: 4.3 },
+            { id: 13, title: "Advanced Wireframing Techniques", category: "UI/UX", instructor: "Rohan Gupta", students: 7654, duration: "3h 20m", rating: 4.8 },
+            { id: 14, title: "Prototyping with Adobe XD", category: "UI/UX", instructor: "Divya Patel", students: 11223, duration: "3h 50m", rating: 4.6 },
+            { id: 15, title: "User Research Methods", category: "UI/UX", instructor: "Vivek Singh", students: 8976, duration: "4h 00m", rating: 4.4 },
+            { id: 16, title: "Designing Mobile Apps", category: "UI/UX", instructor: "Nisha Kapoor", students: 12345, duration: "3h 30m", rating: 4.9 },
+            { id: 17, title: "Accessibility in UI Design", category: "UI/UX", instructor: "Karan Mehta", students: 6789, duration: "2h 45m", rating: 4.2 },
+            { id: 18, title: "UI Animation Techniques", category: "UI/UX", instructor: "Pooja Desai", students: 5432, duration: "3h 15m", rating: 4.5 },
+            { id: 19, title: "Responsive Design Mastery", category: "UI/UX", instructor: "Arjun Nair", students: 9876, duration: "4h 20m", rating: 4.7 },
+            { id: 20, title: "UX Writing Essentials", category: "UI/UX", instructor: "Meena Kumar", students: 7654, duration: "2h 50m", rating: 4.3 },
+            { id: 21, title: "Design Systems Creation", category: "UI/UX", instructor: "Ravi Joshi", students: 11234, duration: "4h 10m", rating: 4.8 },
+            { id: 22, title: "Interaction Design Basics", category: "UI/UX", instructor: "Sanya Reddy", students: 8976, duration: "3h 40m", rating: 4.6 },
+            { id: 23, title: "Sketch App for UI Design", category: "UI/UX", instructor: "Vikram Patel", students: 6543, duration: "3h 00m", rating: 4.4 },
+            { id: 24, title: "Usability Testing Methods", category: "UI/UX", instructor: "Neha Singh", students: 5432, duration: "3h 20m", rating: 4.9 },
+            { id: 25, title: "UI Design for Web Apps", category: "UI/UX", instructor: "Kiran Gupta", students: 9876, duration: "4h 00m", rating: 4.2 },
+            { id: 26, title: "Advanced Figma Techniques", category: "UI/UX", instructor: "Ananya Nair", students: 7654, duration: "3h 45m", rating: 4.7 },
+            { id: 27, title: "UX Design for E-Commerce", category: "UI/UX", instructor: "Rohan Desai", students: 11223, duration: "4h 15m", rating: 4.5 },
+            { id: 28, title: "Motion Design in UI", category: "UI/UX", instructor: "Priya Sharma", students: 8976, duration: "3h 30m", rating: 4.8 },
+            { id: 29, title: "User-Centered Design", category: "UI/UX", instructor: "Amit Kumar", students: 6543, duration: "3h 10m", rating: 4.3 },
+            { id: 30, title: "Prototyping with InVision", category: "UI/UX", instructor: "Sneha Joshi", students: 5432, duration: "3h 50m", rating: 4.6 },
+
+            // Guitar (20)
+            { id: 31, title: "Guitar for Beginners", category: "Guitar", instructor: "James Wilson", students: 12345, duration: "2h 30m", rating: 4.7 },
+            { id: 32, title: "Acoustic Guitar Techniques", category: "Guitar", instructor: "Emily Brown", students: 9876, duration: "3h 00m", rating: 4.4 },
+            { id: 33, title: "Electric Guitar Mastery", category: "Guitar", instructor: "Michael Chen", students: 7654, duration: "3h 15m", rating: 4.8 },
+            { id: 34, title: "Fingerstyle Guitar Basics", category: "Guitar", instructor: "Sarah Davis", students: 11234, duration: "2h 45m", rating: 4.5 },
+            { id: 35, title: "Blues Guitar Essentials", category: "Guitar", instructor: "David Lee", students: 8976, duration: "3h 20m", rating: 4.9 },
+            { id: 36, title: "Rock Guitar Techniques", category: "Guitar", instructor: "Laura Miller", students: 6543, duration: "3h 00m", rating: 4.3 },
+            { id: 37, title: "Jazz Guitar Fundamentals", category: "Guitar", instructor: "Robert Taylor", students: 5432, duration: "3h 30m", rating: 4.6 },
+            { id: 38, title: "Classical Guitar Skills", category: "Guitar", instructor: "Emma Johnson", students: 9876, duration: "2h 50m", rating: 4.2 },
+            { id: 39, title: "Guitar Chord Progressions", category: "Guitar", instructor: "Thomas White", students: 7654, duration: "2h 40m", rating: 4.7 },
+            { id: 40, title: "Guitar Solo Techniques", category: "Guitar", instructor: "Sophie Green", students: 11234, duration: "3h 10m", rating: 4.5 },
+            { id: 41, title: "Advanced Guitar Scales", category: "Guitar", instructor: "Arjun Reddy", students: 8976, duration: "3h 25m", rating: 4.8 },
+            { id: 42, title: "Guitar Improvisation", category: "Guitar", instructor: "Neha Patel", students: 6543, duration: "2h 55m", rating: 4.4 },
+            { id: 43, title: "Flamenco Guitar Basics", category: "Guitar", instructor: "Vikram Nair", students: 5432, duration: "3h 15m", rating: 4.9 },
+            { id: 44, title: "Guitar for Songwriting", category: "Guitar", instructor: "Priya Sharma", students: 9876, duration: "2h 50m", rating: 4.3 },
+            { id: 45, title: "Metal Guitar Techniques", category: "Guitar", instructor: "Rohan Gupta", students: 7654, duration: "3h 20m", rating: 4.6 },
+            { id: 46, title: "Guitar Maintenance Basics", category: "Guitar", instructor: "Sanya Desai", students: 11234, duration: "2h 30m", rating: 4.2 },
+            { id: 47, title: "Country Guitar Skills", category: "Guitar", instructor: "Kiran Kumar", students: 8976, duration: "3h 00m", rating: 4.7 },
+            { id: 48, title: "Guitar Theory Essentials", category: "Guitar", instructor: "Meera Joshi", students: 6543, duration: "2h 45m", rating: 4.5 },
+            { id: 49, title: "Slide Guitar Techniques", category: "Guitar", instructor: "Amit Singh", students: 5432, duration: "3h 10m", rating: 4.8 },
+            { id: 50, title: "Guitar Performance Skills", category: "Guitar", instructor: "Sneha Nair", students: 9876, duration: "3h 30m", rating: 4.4 },
+
+            // Python (30)
+            { id: 51, title: "Python Programming Basics", category: "Python", instructor: "John Smith", students: 15432, duration: "4h 00m", rating: 4.7 },
+            { id: 52, title: "Advanced Python Techniques", category: "Python", instructor: "Ananya Gupta", students: 9876, duration: "4h 30m", rating: 4.5 },
+            { id: 53, title: "Python for Data Science", category: "Python", instructor: "Rahul Sharma", students: 7654, duration: "4h 15m", rating: 4.8 },
+            { id: 54, title: "Web Development with Django", category: "Python", instructor: "Priya Patel", students: 11234, duration: "4h 45m", rating: 4.3 },
+            { id: 55, title: "Python Automation Scripts", category: "Python", instructor: "Vikram Reddy", students: 8976, duration: "3h 50m", rating: 4.6 },
+            { id: 56, title: "Machine Learning with Python", category: "Python", instructor: "Neha Nair", students: 6543, duration: "5h 00m", rating: 4.9 },
+            { id: 57, title: "Python for Game Development", category: "Python", instructor: "Arjun Desai", students: 5432, duration: "4h 10m", rating: 4.2 },
+            { id: 58, title: "Data Analysis with Pandas", category: "Python", instructor: "Sanya Kumar", students: 9876, duration: "3h 45m", rating: 4.7 },
+            { id: 59, title: "Python GUI Development", category: "Python", instructor: "Kiran Joshi", students: 7654, duration: "4h 00m", rating: 4.5 },
+            { id: 60, title: "Web Scraping with Python", category: "Python", instructor: "Ravi Singh", students: 11234, duration: "3h 30m", rating: 4.8 },
+            { id: 61, title: "Python for Cybersecurity", category: "Python", instructor: "Meera Sharma", students: 8976, duration: "4h 20m", rating: 4.4 },
+            { id: 62, title: "Flask Web Development", category: "Python", instructor: "Amit Patel", students: 6543, duration: "4h 15m", rating: 4.6 },
+            { id: 63, title: "Python for AI Basics", category: "Python", instructor: "Sneha Gupta", students: 5432, duration: "4h 30m", rating: 4.9 },
+            { id: 64, title: "Python Data Visualization", category: "Python", instructor: "Rohan Nair", students: 9876, duration: "3h 50m", rating: 4.3 },
+            { id: 65, title: "Python for Beginners II", category: "Python", instructor: "Priya Desai", students: 7654, duration: "4h 00m", rating: 4.7 },
+            { id: 66, title: "Python Database Programming", category: "Python", instructor: "Vikram Kumar", students: 11234, duration: "4h 10m", rating: 4.5 },
+            { id: 67, title: "Python for Finance", category: "Python", instructor: "Neha Reddy", students: 8976, duration: "4h 20m", rating: 4.8 },
+            { id: 68, title: "Python Scripting Essentials", category: "Python", instructor: "Arjun Sharma", students: 6543, duration: "3h 45m", rating: 4.4 },
+            { id: 69, title: "Python for IoT", category: "Python", instructor: "Sanya Nair", students: 5432, duration: "4h 00m", rating: 4.6 },
+            { id: 70, title: "Python API Development", category: "Python", instructor: "Kiran Patel", students: 9876, duration: "4h 15m", rating: 4.9 },
+            { id: 71, title: "Python for Automation II", category: "Python", instructor: "Ravi Gupta", students: 7654, duration: "3h 50m", rating: 4.3 },
+            { id: 72, title: "Deep Learning with Python", category: "Python", instructor: "Meera Desai", students: 11234, duration: "5h 00m", rating: 4.7 },
+            { id: 73, title: "Python for Web Apps", category: "Python", instructor: "Amit Nair", students: 8976, duration: "4h 30m", rating: 4.5 },
+            { id: 74, title: "Python for Beginners III", category: "Python", instructor: "Sneha Sharma", students: 6543, duration: "4h 00m", rating: 4.8 },
+            { id: 75, title: "Python for Data Engineering", category: "Python", instructor: "Rohan Kumar", students: 5432, duration: "4h 15m", rating: 4.4 },
+            { id: 76, title: "Python Testing Frameworks", category: "Python", instructor: "Priya Joshi", students: 9876, duration: "3h 50m", rating: 4.6 },
+            { id: 77, title: "Python for Cloud Computing", category: "Python", instructor: "Vikram Patel", students: 7654, duration: "4h 20m", rating: 4.9 },
+            { id: 78, title: "Python for Robotics", category: "Python", instructor: "Neha Gupta", students: 11234, duration: "4h 30m", rating: 4.3 },
+            { id: 79, title: "Python for Beginners IV", category: "Python", instructor: "Arjun Nair", students: 8976, duration: "4h 00m", rating: 4.7 },
+            { id: 80, title: "Python for Machine Vision", category: "Python", instructor: "Sanya Reddy", students: 6543, duration: "4h 15m", rating: 4.5 },
+
+            // Cooking (10)
+            { id: 81, title: "Indian Cooking Basics", category: "Cooking", instructor: "Ananya Kumar", students: 12345, duration: "2h 30m", rating: 4.7 },
+            { id: 82, title: "Italian Cuisine Essentials", category: "Cooking", instructor: "Rahul Desai", students: 9876, duration: "2h 45m", rating: 4.4 },
+            { id: 83, title: "Baking for Beginners", category: "Cooking", instructor: "Priya Sharma", students: 7654, duration: "3h 00m", rating: 4.8 },
+            { id: 84, title: "Vegan Cooking Techniques", category: "Cooking", instructor: "Vikram Nair", students: 11234, duration: "2h 50m", rating: 4.5 },
+            { id: 85, title: "Sushi Making Mastery", category: "Cooking", instructor: "Neha Patel", students: 8976, duration: "2h 40m", rating: 4.9 },
+            { id: 86, title: "Dessert Creations", category: "Cooking", instructor: "Arjun Gupta", students: 6543, duration: "3h 10m", rating: 4.3 },
+            { id: 87, title: "Thai Cooking Basics", category: "Cooking", instructor: "Sanya Joshi", students: 5432, duration: "2h 55m", rating: 4.6 },
+            { id: 88, title: "Healthy Meal Prep", category: "Cooking", instructor: "Kiran Reddy", students: 9876, duration: "2h 30m", rating: 4.2 },
+            { id: 89, title: "French Cuisine Techniques", category: "Cooking", instructor: "Ravi Sharma", students: 7654, duration: "3h 15m", rating: 4.7 },
+            { id: 90, title: "BBQ Cooking Skills", category: "Cooking", instructor: "Meera Nair", students: 11234, duration: "2h 45m", rating: 4.5 },
+
+            // Video Editing (10)
+            { id: 91, title: "Adobe Premiere Pro Basics", category: "Video Editing", instructor: "James Lee", students: 12345, duration: "3h 00m", rating: 4.7 },
+            { id: 92, title: "Final Cut Pro Essentials", category: "Video Editing", instructor: "Emily Taylor", students: 9876, duration: "3h 15m", rating: 4.4 },
+            { id: 93, title: "DaVinci Resolve Mastery", category: "Video Editing", instructor: "Michael Brown", students: 7654, duration: "3h 30m", rating: 4.8 },
+            { id: 94, title: "Video Editing for Beginners", category: "Video Editing", instructor: "Sarah Wilson", students: 11234, duration: "2h 45m", rating: 4.5 },
+            { id: 95, title: "Color Grading Techniques", category: "Video Editing", instructor: "David Green", students: 8976, duration: "3h 10m", rating: 4.9 },
+            { id: 96, title: "Motion Graphics in After Effects", category: "Video Editing", instructor: "Laura Davis", students: 6543, duration: "3h 20m", rating: 4.3 },
+            { id: 97, title: "Video Editing for YouTube", category: "Video Editing", instructor: "Robert Miller", students: 5432, duration: "2h 50m", rating: 4.6 },
+            { id: 98, title: "Cinematic Editing Skills", category: "Video Editing", instructor: "Emma White", students: 9876, duration: "3h 15m", rating: 4.2 },
+            { id: 99, title: "Audio Editing for Videos", category: "Video Editing", instructor: "Thomas Johnson", students: 7654, duration: "2h 55m", rating: 4.7 },
+            { id: 100, title: "Advanced Video Transitions", category: "Video Editing", instructor: "Sophie Lee", students: 11234, duration: "3h 30m", rating: 4.5 }
+        ];
+
+        // Array of provided image URLs
+        const imageUrls = [
+        'https://guide-images.cdn.ifixit.com/igi/BCU4AgbFicGvFcZA.medium'
+        ];
+
+        // Function to get a random image URL
+        function getRandomImage() {
+            return imageUrls[Math.floor(Math.random() * imageUrls.length)];
+        }
+
+        // Populate Instructor Dropdown
+        const instructorFilter = document.getElementById('instructorFilter');
+        const instructors = [...new Set(courses.map(course => course.instructor))];
+        instructors.forEach(instructor => {
+            const option = document.createElement('option');
+            option.value = instructor;
+            option.textContent = instructor;
+            instructorFilter.appendChild(option);
+        });
+
+        // Populate Course Dropdown for Reviews
+        const reviewCourse = document.getElementById('reviewCourse');
+        courses.forEach(course => {
+            const option = document.createElement('option');
+            option.value = course.id;
+            option.textContent = course.title;
+            reviewCourse.appendChild(option);
+        });
+
+        // Display Courses
+        function displayCourses(filteredCourses) {
+            const courseGrid = document.getElementById('courseGrid');
+            courseGrid.innerHTML = '';
+            filteredCourses.forEach(course => {
+                const courseItem = document.createElement('div');
+                courseItem.className = 'course-item';
+                courseItem.innerHTML = `
+                    <img src="${getRandomImage()}" alt="${course.title}">
+                    <div class="course-info">
+                        <span class="tag">${course.category}</span>
+                        <h3>${course.title}</h3>
+                        <div class="stats">
+                            <span>${course.students} students</span>
+                            <span>${course.duration}</span>
+                        </div>
+                        <div class="instructor">${course.instructor}</div>
+                        <div class="rating">${course.rating} ★</div>
+                    </div>
+                `;
+                courseGrid.appendChild(courseItem);
+            });
+        }
+
+        // Filter Courses
+        function filterCourses() {
+            const category = document.getElementById('categoryFilter').value;
+            const instructor = document.getElementById('instructorFilter').value;
+            const minRating = parseFloat(document.getElementById('ratingFilter').value);
+
+            const filteredCourses = courses.filter(course => {
+                return (category === 'all' || course.category === category) &&
+                       (instructor === 'all' || course.instructor === instructor) &&
+                       course.rating >= minRating;
+            });
+
+            displayCourses(filteredCourses);
+        }
+
+        // Update Rating Slider Value
+        document.getElementById('ratingFilter').addEventListener('input', function() {
+            document.getElementById('ratingValue').textContent = this.value;
+        });
+
+        // Submit Review
+        function submitReview() {
+            const reviewerName = document.getElementById('reviewerName').value;
+            const courseId = document.getElementById('reviewCourse').value;
+            const rating = document.getElementById('reviewRating').value;
+            const reviewText = document.getElementById('reviewText').value;
+
+            if (!reviewerName || !courseId || !rating || !reviewText) {
+                alert('Please fill in all review fields.');
+                return;
+            }
+
+            const reviewList = document.getElementById('reviewList');
+            const reviewItem = document.createElement('div');
+            reviewItem.className = 'review-item';
+            const courseTitle = courses.find(course => course.id === parseInt(courseId)).title;
+            reviewItem.innerHTML = `
+                <p>${reviewText}</p>
+                <div class="reviewer">${reviewerName}</div>
+                <div class="review-rating">Course: ${courseTitle} - ${rating} Stars</div>
+            `;
+            reviewList.prepend(reviewItem);
+
+            // Clear form
+            document.getElementById('reviewerName').value = '';
+            document.getElementById('reviewCourse').value = '';
+            document.getElementById('reviewRating').value = '';
+            document.getElementById('reviewText').value = '';
+        }
+
+        // Initial Display
+        displayCourses(courses);
+    </script>
+</body>
+</html>
